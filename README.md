@@ -1,4 +1,4 @@
-# ml_codespace# 📊 Team 4 – Introduction to Data Science and Machine Learning (SS25)
+# 📊 Team 4 – Introduction to Data Science and Machine Learning (SS25)
 
 Willkommen im Repository von **Team 4** im Kurs
 **INTRODUCTION TO DATA SCIENCE AND MACHINE LEARNING** bei [opencampus.sh](https://opencampus.sh).
