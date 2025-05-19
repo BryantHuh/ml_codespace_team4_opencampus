@@ -10,6 +10,7 @@ Willkommen im Repository von **Team 4** im Kurs
 - **Frieda**
 - **Anna**
 - **Tilon**
+- **Linus**
 
 Unser Gruppenchat für Kommunikation und Koordination:
 🔗 [https://chat.opencampus.sh/opencampus/channels/ss25_ml_team_4](https://chat.opencampus.sh/opencampus/channels/ss25_ml_team_4)
