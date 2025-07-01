@@ -62,6 +62,7 @@ best_model = tuner.get_best_models(num_models=1)[0]
 val_loss, val_mae = best_model.evaluate(X_val_scaled, y_val)
 print(f"Bestes Modell: Val Loss = {val_loss:.2f}, MAE = {val_mae:.2f}")
 import os
-os.makedirs("../../models", exist_ok=True)
-best_model.save("../../models/best_nn_model.keras")
+model_dir = os.path.join(os.path.dirname(__file__), "../models")
+os.makedirs(model_dir, exist_ok=True)
+best_model.save(os.path.join(model_dir, "best_nn_model.keras"))
 print("✅ Bestes Modell gespeichert als 'best_nn_model.keras'")
