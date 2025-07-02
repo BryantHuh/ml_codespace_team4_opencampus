@@ -3,11 +3,12 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.metrics import mean_absolute_percentage_error
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
-from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.callbacks import EarlyStopping
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.optimizers import Adam
+from keras.callbacks import EarlyStopping
 import matplotlib.pyplot as plt
+import joblib
 
 # --- 1. Load Data ---
 data_dir = os.path.join(os.path.dirname(__file__), '../../data/imputated_pickle')
@@ -36,6 +37,8 @@ X_val_cat_df = pd.DataFrame(X_val[categorical_cols])
 
 encoder = OneHotEncoder(sparse_output=False, handle_unknown='ignore')
 encoder.fit(pd.concat([X_train_cat_df, X_val_cat_df], axis=0))
+# Save encoder after fitting
+joblib.dump(encoder, os.path.join(data_dir, 'encoder_nn.joblib'))
 
 X_train_cat = encoder.transform(X_train_cat_df)
 X_val_cat = encoder.transform(X_val_cat_df)
@@ -72,6 +75,8 @@ X_val_final = X_val_final.astype(float)
 scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train_final)
 X_val_scaled = scaler.transform(X_val_final)
+# Save scaler after fitting
+joblib.dump(scaler, os.path.join(data_dir, 'scaler_nn.joblib'))
 
 # --- 4. Define and Train Neural Network ---
 model = Sequential([
@@ -79,7 +84,7 @@ model = Sequential([
     Dense(64, activation='relu'),
     Dense(1, activation='linear')
 ])
-model.compile(optimizer=Adam(learning_rate=0.001), loss='mse', metrics=['mae'])
+model.compile(optimizer=Adam(learning_rate=0.001), loss='mse', metrics=['mae'])  # type: ignore
 early_stop = EarlyStopping(monitor='val_loss', patience=15, restore_best_weights=True)
 
 print('Neural Network Architecture:')
@@ -91,7 +96,7 @@ history = model.fit(
     epochs=200,
     batch_size=32,
     callbacks=[early_stop],
-    verbose=2
+    verbose=2,  # type: ignore
 )
 
 # --- 5. Plot Loss Curves ---

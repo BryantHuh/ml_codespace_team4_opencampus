@@ -3,7 +3,9 @@ import pandas as pd
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import StandardScaler
-from tensorflow.keras.models import load_model
+# Use keras directly for model loading to avoid import errors
+from keras.models import load_model
+import joblib
 
 # --- 1. Load Test Data ---
 data_dir = os.path.join(os.path.dirname(__file__), '../../data/imputated_pickle')
@@ -36,7 +38,9 @@ rf.fit(X_train_scaled, y_train)
 y_test_rf = rf.predict(X_test_scaled)
 
 # --- 5. Prepare Features for Neural Net (one-hot, scale) ---
-from sklearn.preprocessing import OneHotEncoder
+# Load encoder and scaler from disk (fitted during training)
+encoder = joblib.load(os.path.join(data_dir, 'encoder_nn.joblib'))
+scaler_nn = joblib.load(os.path.join(data_dir, 'scaler_nn.joblib'))
 # Use same categorical_cols as in NN script
 categorical_cols = []
 for col in X_test.columns:
@@ -48,26 +52,19 @@ for col in ['Warengruppe', 'FerienName_Code', 'Temp_Step']:
 if 'Datum' in X_test.columns and 'Datum' not in categorical_cols:
     categorical_cols.append('Datum')
 X_test_cat_df = pd.DataFrame(X_test[categorical_cols])
-encoder = OneHotEncoder(sparse_output=False, handle_unknown='ignore')
-# Fit encoder on train+val (simulate with train here)
-X_train_cat_df = pd.DataFrame(X_train[categorical_cols])
-encoder.fit(X_train_cat_df)
 X_test_cat = encoder.transform(X_test_cat_df)
 X_test_num = X_test.drop(columns=categorical_cols)
-X_test_final = np.hstack([X_test_num.to_numpy(), X_test_cat])
+X_test_num_arr = np.asarray(X_test_num)
+X_test_cat_arr = np.asarray(X_test_cat)
+X_test_final = np.hstack([X_test_num_arr, X_test_cat_arr])
 X_test_final = X_test_final.astype(float)
-# Scale (fit scaler on train as above)
-scaler_nn = StandardScaler()
-X_train_num = X_train.drop(columns=categorical_cols)
-X_train_cat = encoder.transform(X_train_cat_df)
-X_train_final = np.hstack([X_train_num.to_numpy(), X_train_cat])
-X_train_final = X_train_final.astype(float)
-scaler_nn.fit(X_train_final)
 X_test_scaled_nn = scaler_nn.transform(X_test_final)
 
 # --- 6. Load and Predict with Neural Net ---
 model_path = os.path.join(data_dir, 'nn_model_imputed_onehot.keras')
 model = load_model(model_path)
+if model is None:
+    raise RuntimeError(f'Failed to load neural network model from {model_path}')
 y_test_nn = model.predict(X_test_scaled_nn).flatten()
 
 # --- 7. Create Submission Files ---
