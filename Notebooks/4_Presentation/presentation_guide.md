@@ -138,6 +138,12 @@ The model was trained on the same feature set as the neural network, including a
 - Highlight that the Random Forest model achieved the best MAPE scores and explain why it likely performed better than the neural network.
 - Report MAPE scores (overall and by group).
 
+Linus: Introduction, Variables (With Bar-Charts)
+Anna: Linear, Imputation
+Tilon: Neural Net, Randomforest
+
+High & Lowlights: ...
+
+
 ---
 
-Good luck with your presentation! 🎉
