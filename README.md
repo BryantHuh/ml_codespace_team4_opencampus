@@ -1,7 +1,21 @@
 # 📊 Team 4 – Introduction to Data Science and Machine Learning (SS25)
 
-Willkommen im Repository von **Team 4** im Kurs
-**INTRODUCTION TO DATA SCIENCE AND MACHINE LEARNING** bei [opencampus.sh](https://opencampus.sh).
+Welcome! This repository contains all code, data, and documentation for the bakery sales forecasting project.
+
+## 📂 Directory Overview
+
+Each main directory contains a README with more details:
+
+- [Notebooks/](Notebooks/README.md): All Jupyter notebooks and scripts for data preparation, analysis, modeling, and presentation.
+- [data/](data/README.md): All raw, intermediate, and processed data files.
+- [models/](models/README.md): Saved machine learning models.
+- [src/](src/README.md): Standalone scripts for advanced modeling and ensemble methods.
+- [docs/](docs/README.md): Documentation and visualizations.
+- [kerastuner_dir/](kerastuner_dir/README.md): Keras Tuner hyperparameter search results.
+- [weekly_tasks/](weekly_tasks/README.md): Weekly assignments, experiments, and related data.
+- [example_notebooks/](example_notebooks/README.md): Example notebooks for neural network data preparation and estimation.
+
+See each directory's README for a detailed description of its contents and purpose.
 
 ---
 

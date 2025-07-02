@@ -1,3 +1,18 @@
+# Weekly Tasks Directory
+
+This directory contains weekly assignments, experiments, and related data for the project.
+
+## Contents
+- **week5.ipynb, week5fail.ipynb, week7_neurolnet.ipynb, week7_prep.ipynb**: Notebooks for weekly tasks and experiments.
+- **desc_statistics.ipynb**: Descriptive statistics notebook.
+- **splitdataset.ipynb**: Dataset splitting notebook.
+- **submission_*.csv**: Submission files for various models.
+- **python_model.h5**: Saved model file.
+- **pickle_data/**: Pickled feature and label sets for weekly tasks.
+- **README.md**: This file.
+
+See subdirectory README for more details.
+
 # Task Checklist
 
 ## 📊 Data Preparation & Cleaning
@@ -16,7 +31,7 @@
 - [ ] Use a simple linear model to predict the test dataset
 - [ ] Evaluate the model performance (aim for R² as close to 1 as possible)
 - [ ] Maximize adjusted R² on the training set
-- [ ] Document linear regression calculations in the “Baseline Model” directory
+- [ ] Document linear regression calculations in the "Baseline Model" directory
 
 ## 📤 Submission
 - [ ] Create `submission.csv` file
