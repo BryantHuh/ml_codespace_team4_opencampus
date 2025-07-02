@@ -85,14 +85,48 @@ early_stop = EarlyStopping(monitor='val_loss', patience=30, restore_best_weights
 
 ### c) MAPE Scores for the Overall Validation Set and Each Product Group
 - **Overall Validation MAPE:**
-  - Example: 22.5% (replace with your actual value)
+  - 21.21%
 - **MAPE by Product Group (Warengruppe):**
-  - Example:
-    - Warengruppe 1: 18.2%
-    - Warengruppe 2: 24.5%
-    - Warengruppe 3: 21.0%
-    - ...
-  *(Replace with your actual output from the script)*
+
+MAPE by Product Group (Warengruppe):
+  - Warengruppe 1: 24.17%
+  - Warengruppe 2: 13.25%
+  - Warengruppe 3: 22.27%
+  - Warengruppe 4: 23.43%
+  - Warengruppe 5: 16.55%
+  - Warengruppe 6: 61.81%
+
+---
+
+## 5b. Random Forest Optimization
+
+The Random Forest model outperformed all other models in terms of prediction accuracy.
+
+### a) Model Description
+We used a `RandomForestRegressor` from scikit-learn with the following key settings:
+- `n_estimators=200`
+- `max_depth=25`
+- `min_samples_split=5`
+- `random_state=42`
+- Features were not scaled (tree-based models don't require scaling).
+
+The model was trained on the same feature set as the neural network, including all engineered variables.
+
+### b) Performance
+- **Overall Validation MAPE:**
+  - 16.84% (best overall score)
+- **MAPE by Product Group:**
+  - Warengruppe 1: 18.07%
+  - Warengruppe 2: 11.04%
+  - Warengruppe 3: 17.31%
+  - Warengruppe 4: 18.95%
+  - Warengruppe 5: 13.32%
+  - Warengruppe 6: 49.88%
+
+### c) Why Random Forest Worked Better
+- Captures nonlinear relationships and interactions between features.
+- Robust to outliers and irrelevant features.
+- Performs well with mixed feature types (continuous, binary, categorical encodings).
 
 ---
 
@@ -101,6 +135,7 @@ early_stop = EarlyStopping(monitor='val_loss', patience=30, restore_best_weights
 - Present the model equation and report Adjusted R².
 - Briefly describe imputation methods.
 - Show the neural network code and loss curve plot.
+- Highlight that the Random Forest model achieved the best MAPE scores and explain why it likely performed better than the neural network.
 - Report MAPE scores (overall and by group).
 
 ---
