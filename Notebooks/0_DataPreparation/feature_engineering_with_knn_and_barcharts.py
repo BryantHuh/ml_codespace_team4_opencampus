@@ -6,6 +6,7 @@ from sklearn.impute import KNNImputer
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import seaborn as sns
+from itertools import product
 
 # --- 1. Load Data ---
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
@@ -95,14 +96,47 @@ df['Windgeschwindigkeit'] = df['Windgeschwindigkeit'].fillna(df['Windgeschwindig
 df['Temp_Wind'] = df['Temperatur'] * df['Windgeschwindigkeit']
 
 # --- 5. Save Pickled Data for Modeling ---
-# Drop 'id' and 'Umsatz' if they exist
+df['Datum'] = pd.to_datetime(df['Datum'])
+train = df[(df['Datum'] >= '2013-07-01') & (df['Datum'] <= '2017-07-31')]
+val   = df[(df['Datum'] >= '2017-08-01') & (df['Datum'] <= '2018-07-31')]
 feature_cols = [col for col in df.columns if col not in ['id', 'Umsatz']]
-features = df[feature_cols]
-labels = df['Umsatz']
+X_train = train[feature_cols]
+y_train = train['Umsatz']
+X_val = val[feature_cols]
+y_val = val['Umsatz']
 
-# Split data
-X_temp, X_test, y_temp, y_test = train_test_split(features, labels, test_size=0.2, random_state=42)
-X_train, X_val, y_train, y_val = train_test_split(X_temp, y_temp, test_size=0.2, random_state=42)
+# --- Create test set for submission as cartesian product ---
+alle_daten = pd.date_range(start='2018-08-01', end='2019-07-31', freq='D')
+warengruppen = [1, 2, 3, 4, 5, 6]
+voll_kombis = pd.DataFrame(list(product(alle_daten, warengruppen)), columns=['Datum', 'Warengruppe'])
+# Merge all features onto this grid
+X_test = voll_kombis.merge(df.drop(columns=['Umsatz']), on=['Datum', 'Warengruppe'], how='left')
+# If any features are missing (e.g., due to no sales), fill with appropriate values
+for col in X_train.columns:
+    if col not in X_test.columns:
+        X_test[col] = np.nan
+X_test = X_test[X_train.columns]  # Ensure same column order as train
+# No y_test for submission
+
+# Ensure X_test is a DataFrame
+if not isinstance(X_test, pd.DataFrame):
+    X_test = pd.DataFrame(X_test)
+
+# Ensure X_train is a DataFrame for median/mode
+if not isinstance(X_train, pd.DataFrame):
+    X_train = pd.DataFrame(X_train, columns=feature_cols)
+# After merging to create X_test, fill NaNs with sensible defaults
+for col in ['Temperatur', 'Bewoelkung', 'Windgeschwindigkeit']:
+    if col in X_test.columns:
+        X_test[col] = X_test[col].fillna(X_train[col].median() if col in X_train else 0)
+if 'Wettercode' in X_test.columns:
+    X_test['Wettercode'] = X_test['Wettercode'].fillna(-1).astype(int)
+for col in ['Warengruppe', 'FerienName_Code', 'Temp_Step']:
+    if col in X_test.columns:
+        mode_val = X_train[col].mode()[0] if col in X_train and not X_train[col].mode().empty else 0
+        X_test[col] = X_test[col].fillna(mode_val)
+# Fill any remaining NaNs with 0
+X_test = X_test.fillna(0)
 
 # Save as pickles
 X_train.to_pickle(os.path.join(impute_dir, 'training_features.pkl'))
@@ -110,7 +144,6 @@ y_train.to_pickle(os.path.join(impute_dir, 'training_labels.pkl'))
 X_val.to_pickle(os.path.join(impute_dir, 'validation_features.pkl'))
 y_val.to_pickle(os.path.join(impute_dir, 'validation_labels.pkl'))
 X_test.to_pickle(os.path.join(impute_dir, 'test_features.pkl'))
-y_test.to_pickle(os.path.join(impute_dir, 'test_labels.pkl'))
 
 # --- 6. Bar Charts for Engineered Variables ---
 plt.figure(figsize=(6,4))
