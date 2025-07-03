@@ -146,22 +146,55 @@ y_val.to_pickle(os.path.join(impute_dir, 'validation_labels.pkl'))
 X_test.to_pickle(os.path.join(impute_dir, 'test_features.pkl'))
 
 # --- 6. Bar Charts for Engineered Variables ---
+import numpy as np
+
+# Helper function to add value labels on bars
+def add_value_labels(ax, data, x_col, y_col, round_digits=2):
+    means = data.groupby(x_col)[y_col].mean().round(round_digits)
+    for i, val in enumerate(means):
+        ax.text(i, val, f'{val}', ha='center', va='bottom')
+
 plt.figure(figsize=(6,4))
-sns.barplot(data=df, x='IstWochenende', y='Umsatz', errorbar=('ci', 95), palette='Blues', hue='IstWochenende', legend=False)
+ax = sns.barplot(data=df, x='IstWochenende', y='Umsatz', errorbar=('ci', 95), palette='Blues', hue='IstWochenende', legend=False)
 plt.title('Average Sales by Weekend/Weekday')
 plt.xlabel('IstWochenende (0=Weekday, 1=Weekend)')
 plt.ylabel('Average Sales')
+add_value_labels(ax, df, 'IstWochenende', 'Umsatz')
 plt.tight_layout()
 plt.savefig(os.path.join(impute_dir, 'barchart_IstWochenende.png'))
 plt.close()
 
 plt.figure(figsize=(6,4))
-sns.barplot(data=df, x='Wetter_extrem', y='Umsatz', errorbar=('ci', 95), palette='Oranges', hue='Wetter_extrem', legend=False)
+ax = sns.barplot(data=df, x='Wetter_extrem', y='Umsatz', errorbar=('ci', 95), palette='Oranges', hue='Wetter_extrem', legend=False)
 plt.title('Average Sales by Extreme Weather')
 plt.xlabel('Wetter_extrem (0=Normal, 1=Extreme)')
 plt.ylabel('Average Sales')
+add_value_labels(ax, df, 'Wetter_extrem', 'Umsatz')
 plt.tight_layout()
 plt.savefig(os.path.join(impute_dir, 'barchart_Wetter_extrem.png'))
 plt.close()
 
+plt.figure(figsize=(8,5))
+ax = sns.barplot(data=df, x='Ferienzeit', y='Umsatz', ci=95, palette='Greens', hue='Ferienzeit', dodge=False)
+plt.title('Average Sales During Ferienzeit with 95% CI')
+plt.xlabel('Ferienzeit (0=No, 1=Yes)')
+plt.ylabel('Average Sales')
+add_value_labels(ax, df, 'Ferienzeit', 'Umsatz')
+plt.tight_layout()
+plt.savefig(os.path.join(impute_dir, 'barchart_Ferienzeit.png'))
+plt.close()
+
+plt.figure(figsize=(8,5))
+ax = sns.barplot(data=df, x='Feiertag', y='Umsatz', ci=95, palette='Purples', hue='Feiertag', dodge=False)
+plt.title('Average Sales on Feiertag with 95% CI')
+plt.xlabel('Feiertag (0=No, 1=Yes)')
+plt.ylabel('Average Sales')
+add_value_labels(ax, df, 'Feiertag', 'Umsatz')
+plt.tight_layout()
+plt.savefig(os.path.join(impute_dir, 'barchart_Feiertag.png'))
+plt.close()
+
+
+
 print('Feature engineering, KNN imputation, and bar chart generation complete. Pickles and plots saved in:', impute_dir)
+
