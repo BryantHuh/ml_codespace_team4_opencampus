@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, r2_score
-from tensorflow import keras
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout
 from tensorflow.keras.optimizers import Adam
@@ -11,7 +10,7 @@ from keras_tuner import HyperModel, RandomSearch
 # Daten laden
 import os
 # Verzeichnis mit Pickle-Dateien
-root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../data/pickle_data"))
+root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../data/pickle_data"))
 pickle_dir = root_dir
 
 X_train = pd.read_pickle(f"{pickle_dir}/training_features.pkl")
@@ -62,7 +61,7 @@ best_model = tuner.get_best_models(num_models=1)[0]
 val_loss, val_mae = best_model.evaluate(X_val_scaled, y_val)
 print(f"Bestes Modell: Val Loss = {val_loss:.2f}, MAE = {val_mae:.2f}")
 import os
-model_dir = os.path.join(os.path.dirname(__file__), "../models")
+model_dir = os.path.join(os.path.dirname(__file__), "./models")
 os.makedirs(model_dir, exist_ok=True)
 best_model.save(os.path.join(model_dir, "best_nn_model.keras"))
 print("✅ Bestes Modell gespeichert als 'best_nn_model.keras'")

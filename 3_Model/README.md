@@ -11,3 +11,5 @@ This directory contains scripts and notebooks for advanced model training, tunin
 - **random_forest_model.ipynb**: Random forest modeling notebook.
 - **subm_rand_forest.ipynb**: Random forest submission notebook.
 - **submission_randomforest.csv**: Random forest predictions submission file.
+- **models/**: Saved machine learning models (Keras, etc.).
+- **kerastuner_dir/**: Keras Tuner hyperparameter search results.

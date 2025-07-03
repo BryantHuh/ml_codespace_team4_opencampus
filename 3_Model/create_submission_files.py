@@ -8,7 +8,7 @@ from keras.models import load_model
 import joblib
 
 # --- 1. Load Test Data ---
-data_dir = os.path.join(os.path.dirname(__file__), '../../data/imputated_pickle')
+data_dir = os.path.join(os.path.dirname(__file__), '../data/imputated_pickle')
 X_test = pd.read_pickle(os.path.join(data_dir, 'test_features.pkl'))
 
 # --- Ensure correct id column in test set ---
@@ -17,7 +17,7 @@ X_test['Warengruppe'] = X_test['Warengruppe'].astype(int)
 X_test['id'] = X_test.apply(lambda row: int(row['Datum'].strftime('%y%m%d') + str(row['Warengruppe'])), axis=1)
 
 # --- Check id coverage against sample_submission.csv ---
-sample_sub_path = os.path.join(os.path.dirname(__file__), '../../data/sample_submission.csv')
+sample_sub_path = os.path.join(os.path.dirname(__file__), '../data/sample_submission.csv')
 sample_submission = pd.read_csv(sample_sub_path)
 missing_ids = set(sample_submission['id']) - set(X_test['id'])
 extra_ids = set(X_test['id']) - set(sample_submission['id'])
@@ -104,7 +104,7 @@ submission_rf = pd.DataFrame({'id': ids, 'Umsatz': y_test_rf})
 submission_nn = pd.DataFrame({'id': ids, 'Umsatz': y_test_nn})
 
 # --- 8. Align with sample_submission.csv ---
-sample_sub_path = os.path.join(os.path.dirname(__file__), '../../data/sample_submission.csv')
+sample_sub_path = os.path.join(os.path.dirname(__file__), '../data/sample_submission.csv')
 sample_submission = pd.read_csv(sample_sub_path)
 # Merge predictions with sample_submission to ensure correct order and count
 submission_rf = pd.DataFrame({'id': ids, 'Umsatz': y_test_rf})
