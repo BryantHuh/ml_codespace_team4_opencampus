@@ -1,8 +1,7 @@
 # Sales Forecasting for a Bakery Branch
 
 ## Repository Link
-
-https://github.com/your_username/your_project_name
+https://github.com/BryantHuh/ml_codespace_team4_opencampus
 
 
 ## 📊 Team 4 – Introduction to Data Science and Machine Learning (SS25)
@@ -37,7 +36,6 @@ See each directory's README for a detailed description of its contents and purpo
 
 ## 👥 Teammitglieder
 
-- **Frieda**
 - **Anna**
 - **Tilon**
 - **Linus**
@@ -72,12 +70,12 @@ Dazu gehören unter anderem:
 -   **Best Model:** Random Forest Model
 -   **Evaluation Metric:** MAPE: 16.84 %
 -   **Result by Category** (Identifier):
-    -   **Bread** (1): [18.07]%
-    -   **Rolls** (2): [11.04]%
-    -   **Croissant** (3): [17.31]%
-    -   **Confectionery** (4): [18.95]%
-    -   **Cake** (5): [13.32]%
-    -   **Seasonal Bread** (6): [49.88]%
+    -   **Bread** (1): 18.07%
+    -   **Rolls** (2): 11.04%
+    -   **Croissant** (3): 17.31%
+    -   **Confectionery** (4): 18.95%
+    -   **Cake** (5): 13.32%
+    -   **Seasonal Bread** (6): 49.88%
 
 
 ## Cover Image
